@@ -21,23 +21,27 @@ import au.com.dius.pact.provider.junit.target.TestTarget;
 @RunWith(PactRunner.class)
 @Provider("ArticlesProvider")
 @PactFolder("src/test/resources/pacts")
-public class FirstTestLocal {
+public class FirstTestLocalBasedOnPactFile {
 
 	@Rule
 	public MessagePactProviderRule mockProvider = new MessagePactProviderRule("ArticlesProvider", this);
 
 	@TestTarget
-	public final Target target = new HttpTarget(5555);
+	public final Target target = new HttpTarget(8080);
 
 	@State("default")
 	public void stateChange() {
+	}
+
+	@State("Pact for Issue 313")
+	public void stateForIssue313Change() {
 	}
 
 	@PactVerification(value = "ArticlesProvider", fragment = "createPact")
 	@Test
 	public void testArticles() throws IOException {
 		byte[] currentMessage = mockProvider.getMessage();
-		assertEquals("{\n" + "  \"someData\": { \"mir\": \"hello world\" }\n" + "}", new String(currentMessage));
+		assertEquals("{\n  \"someData\": { \"mir\": \"hello world\" }\n}", new String(currentMessage));
 	}
 
 }
